@@ -1,0 +1,248 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="applicationForm">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:string" name="name"/>
+        <xs:element type="xs:int" name="lastHash"/>
+        <xs:element type="xs:dateTime" name="lastHashModified"/>
+        <xs:element type="xs:string" name="description"/>
+        <xs:element type="xs:string" name="columnModel"/>
+        <xs:element name="scripts" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:byte" name="id"/>
+              <xs:element type="xs:dateTime" name="lastModTs"/>
+              <xs:element type="xs:string" name="name"/>
+              <xs:element type="xs:string" name="script"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Panel" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="stringAttribute">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:byte" name="access"/>
+                    <xs:element type="xs:string" name="description" minOccurs="0"/>
+                    <xs:element type="xs:int" name="id"/>
+                    <xs:element type="xs:string" name="name"/>
+                    <xs:element type="xs:string" name="type"/>
+                    <xs:element type="xs:string" name="value"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="longStringAttribute">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:byte" name="access"/>
+                    <xs:element type="xs:string" name="description" minOccurs="0"/>
+                    <xs:element type="xs:int" name="id"/>
+                    <xs:element type="xs:string" name="name"/>
+                    <xs:element type="xs:string" name="type"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element type="xs:string" name="clazz"/>
+              <xs:element type="xs:byte" name="colSpan"/>
+              <xs:element type="xs:byte" name="inGroupIndex"/>
+              <xs:element type="xs:string" name="name"/>
+              <xs:element type="xs:byte" name="version"/>
+              <xs:element type="xs:string" name="xtype"/>
+              <xs:element name="FormGroup">
+                <xs:complexType>
+                  <xs:choice maxOccurs="unbounded" minOccurs="0">
+                    <xs:element name="stringAttribute">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:byte" name="access"/>
+                          <xs:element type="xs:string" name="description" minOccurs="0"/>
+                          <xs:element type="xs:int" name="id"/>
+                          <xs:element type="xs:string" name="name"/>
+                          <xs:element type="xs:string" name="type"/>
+                          <xs:element type="xs:string" name="value"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="longStringAttribute">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:byte" name="access"/>
+                          <xs:element type="xs:string" name="description" minOccurs="0"/>
+                          <xs:element type="xs:int" name="id"/>
+                          <xs:element type="xs:string" name="name"/>
+                          <xs:element type="xs:string" name="type"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="numberAttribute">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:byte" name="access"/>
+                          <xs:element type="xs:string" name="description" minOccurs="0"/>
+                          <xs:element type="xs:int" name="id"/>
+                          <xs:element type="xs:string" name="name"/>
+                          <xs:element type="xs:string" name="type"/>
+                          <xs:element type="xs:float" name="value"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="booleanAttribute">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:byte" name="access"/>
+                          <xs:element type="xs:string" name="description" minOccurs="0"/>
+                          <xs:element type="xs:int" name="id"/>
+                          <xs:element type="xs:string" name="name"/>
+                          <xs:element type="xs:string" name="type"/>
+                          <xs:element type="xs:string" name="value"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element type="xs:string" name="clazz"/>
+                    <xs:element type="xs:byte" name="colSpan"/>
+                    <xs:element type="xs:byte" name="inGroupIndex"/>
+                    <xs:element type="xs:string" name="name"/>
+                    <xs:element name="rights">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:byte" name="id"/>
+                          <xs:element type="xs:byte" name="level"/>
+                          <xs:element type="xs:string" name="rightName"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element type="xs:byte" name="version"/>
+                    <xs:element type="xs:string" name="xtype"/>
+                    <xs:element name="formField">
+                      <xs:complexType>
+                        <xs:choice maxOccurs="unbounded" minOccurs="0">
+                          <xs:element name="booleanAttribute">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="access"/>
+                                <xs:element type="xs:string" name="description" minOccurs="0"/>
+                                <xs:element type="xs:int" name="id"/>
+                                <xs:element type="xs:string" name="name"/>
+                                <xs:element type="xs:string" name="type"/>
+                                <xs:element type="xs:string" name="value" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="longStringAttribute">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="access"/>
+                                <xs:element type="xs:string" name="description" minOccurs="0"/>
+                                <xs:element type="xs:int" name="id"/>
+                                <xs:element type="xs:string" name="name"/>
+                                <xs:element type="xs:string" name="type"/>
+                                <xs:element type="xs:string" name="value" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="numberAttribute">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="access"/>
+                                <xs:element type="xs:string" name="description" minOccurs="0"/>
+                                <xs:element type="xs:int" name="id"/>
+                                <xs:element type="xs:string" name="name"/>
+                                <xs:element type="xs:string" name="type"/>
+                                <xs:element type="xs:string" name="value" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="stringAttribute">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="access"/>
+                                <xs:element type="xs:string" name="description" minOccurs="0"/>
+                                <xs:element type="xs:int" name="id"/>
+                                <xs:element type="xs:string" name="name"/>
+                                <xs:element type="xs:string" name="type"/>
+                                <xs:element type="xs:string" name="value" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element type="xs:string" name="clazz"/>
+                          <xs:element type="xs:byte" name="colSpan"/>
+                          <xs:element type="xs:byte" name="inGroupIndex"/>
+                          <xs:element type="xs:string" name="label"/>
+                          <xs:element type="xs:string" name="name"/>
+                          <xs:element type="xs:byte" name="version"/>
+                          <xs:element type="xs:string" name="xtype"/>
+                          <xs:element type="xs:string" name="tooltip"/>
+                          <xs:element name="arrayAttribute">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="access"/>
+                                <xs:element type="xs:string" name="description" minOccurs="0"/>
+                                <xs:element type="xs:int" name="id"/>
+                                <xs:element type="xs:string" name="name"/>
+                                <xs:element type="xs:string" name="type"/>
+                                <xs:element type="xs:string" name="value" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="dependencies">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:string" name="dependentForName"/>
+                                <xs:element type="xs:string" name="dependentOnName"/>
+                                <xs:element type="xs:short" name="id"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element type="xs:string" name="dependencyHandler"/>
+                          <xs:element name="dependents">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:string" name="dependentForName"/>
+                                <xs:element type="xs:string" name="dependentOnName"/>
+                                <xs:element type="xs:short" name="id"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="rights">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="id"/>
+                                <xs:element type="xs:byte" name="level"/>
+                                <xs:element type="xs:string" name="rightName"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:choice>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="dependencies">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:string" name="dependentForName"/>
+                          <xs:element type="xs:string" name="dependentOnName"/>
+                          <xs:element type="xs:byte" name="id"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element type="xs:string" name="dependencyHandler"/>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="dependencies">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="dependentForName"/>
+                    <xs:element type="xs:string" name="dependentOnName"/>
+                    <xs:element type="xs:short" name="id"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element type="xs:string" name="dependencyHandler"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

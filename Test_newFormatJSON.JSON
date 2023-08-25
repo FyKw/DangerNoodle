@@ -1,0 +1,189 @@
+{
+  "components": [
+    {
+      "label": "Image view",
+      "type": "image",
+      "layout": {
+        "row": "Row_0zzi944",
+        "columns": null
+      },
+      "id": "Field_0i9pmeg",
+      "source": "https://placehold.co/1000x50?text=Tab 1"
+    },
+    {
+      "text": "## Group",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0tzztiz",
+        "columns": null
+      },
+      "id": "Field_1ic4e14"
+    },
+    {
+      "values": [
+        {
+          "label": "test 1",
+          "value": "test 1"
+        },
+        {
+          "label": "test 2",
+          "value": "test 2"
+        }
+      ],
+      "label": "Combobox",
+      "type": "taglist",
+      "layout": {
+        "row": "Row_05hqu2t",
+        "columns": null
+      },
+      "id": "Field_051j7re",
+      "key": "field_1m8czm1"
+    },
+    {
+      "label": "yes",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_1co1qtp",
+        "columns": null
+      },
+      "id": "Field_0fsdp18",
+      "key": "field_1ndlcgk",
+      "description": "Boolean Combo"
+    },
+    {
+      "subtype": "datetime",
+      "dateLabel": "Datefield",
+      "label": "Date time",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_1ueg8v4",
+        "columns": null
+      },
+      "id": "Field_1i8xctp",
+      "key": "field_0m9h3w3",
+      "timeLabel": "Timespinner",
+      "timeSerializingFormat": "utc_offset",
+      "timeInterval": 15
+    },
+    {
+      "values": [
+        {
+          "label": "Test Radio 1",
+          "value": "1"
+        },
+        {
+          "label": "Test Radio 2",
+          "value": "2"
+        }
+      ],
+      "label": "Radio Buttons",
+      "type": "radio",
+      "layout": {
+        "row": "Row_0gxyxrl",
+        "columns": null
+      },
+      "id": "Field_1uf9lr8",
+      "key": "field_1hn15ap"
+    },
+    {
+      "label": "Text field",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1s3eexw",
+        "columns": null
+      },
+      "id": "Field_0lhd0im",
+      "key": "field_1qj7fn5"
+    },
+    {
+      "label": "Text area",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_02zhmj3",
+        "columns": null
+      },
+      "id": "Field_0fwjvtj",
+      "key": "field_12kxsww"
+    },
+    {
+      "text": "## Group 2",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0ny7gql",
+        "columns": null
+      },
+      "id": "Field_0124ef2"
+    },
+    {
+      "text": "### label",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0aja7f8",
+        "columns": null
+      },
+      "id": "Field_0dishul"
+    },
+    {
+      "label": "Image view",
+      "type": "image",
+      "layout": {
+        "row": "Row_0fqjbwv",
+        "columns": null
+      },
+      "id": "Field_02n94c7",
+      "source": "https://placehold.co/600x30?text=Tab+2"
+    },
+    {
+      "text": "## Group",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0ai1kqv",
+        "columns": null
+      },
+      "id": "Field_0be9xq8"
+    },
+    {
+      "text": "### Label",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0o9vsg3",
+        "columns": null
+      },
+      "id": "Field_0twojh7"
+    },
+    {
+      "values": [
+        {
+          "label": "Test Tab 1",
+          "value": "TT1"
+        },
+        {
+          "label": "Test Tab 2",
+          "value": "TT2"
+        }
+      ],
+      "label": "RadioButtons",
+      "type": "radio",
+      "layout": {
+        "row": "Row_1bkovsu",
+        "columns": null
+      },
+      "id": "Field_0m7k28a",
+      "key": "field_074a1p9"
+    }
+  ],
+  "type": "default",
+  "id": "Form_1mgi8o2",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.13.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.19.0",
+  "schemaVersion": 9
+}
