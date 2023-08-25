@@ -35,7 +35,7 @@ def process_xml_file(file_path):
         process_tree(xml_tree)
 
 
-def translate_tabitem(xml_element) -> dict:
+def translate_tab_item(xml_element) -> dict:
     # Arrange
 
     row_number = generate_random_string(6)
@@ -61,7 +61,7 @@ def translate_tabitem(xml_element) -> dict:
     return result
 
 
-def translate_groupitem(xml_element):
+def translate_group_item(xml_element):
     # Arrange
 
     row_number = generate_random_string(6)
@@ -88,15 +88,17 @@ def translate_groupitem(xml_element):
 def translate_date(xml_element):
     # Arrange
 
-    datefield_label = xml_element.find('./label')
+    datefield_label_element = xml_element.find('./label')
+    datefield_label = datefield_label_element.text if datefield_label_element is not None else ""
+
     row_number = generate_random_string(6)
     make_id = "Field_" + generate_uuid(7)
     make_key = generate_uuid(7) + "_key"
     my_date_description = xml_element.find('./longStringAttribute/value') if xml_element.find('./longStringAttribute/value') is not None else ""
 
     boolean_attributes = xml_element.findall('./booleanAttribute')
-    readonly_value = False  # default value if not found
-    disabled_value = False # default value if not found
+    disabled_value = False
+    readonly_value = False
 
     # Iterate through the found booleanAttribute subnodes
     for boolean_attribute in boolean_attributes:
@@ -105,14 +107,12 @@ def translate_date(xml_element):
         if name_attribute is not None and name_attribute.text == 'editable':
             value_attribute = boolean_attribute.find('./value')
             if value_attribute is not None:
-                disabled_value = value_attribute.bool
-        elif name_attribute is not None and name_attribute.text == 'readonly':
+                disabled_value = value_attribute.text.capitalize() == "True"
+        elif name_attribute is not None and name_attribute.text == 'readOnly':
             # Retrieve the 'value' attribute
             value_attribute = boolean_attribute.find('./value')
             if value_attribute is not None:
-                readonly_value = value_attribute.bool
-                break  # Stop iterating once the 'readonly' attribute is found
-
+                readonly_value = value_attribute.text.capitalize() == "True"
 
     # build result
     result = {
@@ -211,9 +211,9 @@ def map_element(xml_element):
     # Find the 'name' child element and get its text content
     match xml_element.find('./xtype').text:
         case 'ddtabitem':
-            translate_tabitem(xml_element)
+            translate_tab_item(xml_element)
         case 'ddgroup':
-            translate_groupitem(xml_element)
+            translate_group_item(xml_element)
         case 'tpl-datefield':
             translate_date(xml_element)
         case 'tpl-textarea':
