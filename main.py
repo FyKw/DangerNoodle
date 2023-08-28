@@ -1,3 +1,4 @@
+import array
 import glob
 import numbers
 import random
@@ -186,7 +187,7 @@ def translate_textarea(xml_element):
     readonly_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize == 'True'
 
     # required value of the element
-    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize() == "True"
+    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize() == 'True'
 
     # build result
     result = {
@@ -257,6 +258,14 @@ def translate_radiobutton(xml_element):
 
     # Flatten the list and create the desired dictionary
     values_attribute = [{"label": val, "value": val} for sublist in input_list for val in sublist]
+
+    # default attribute
+    default_attribute = literal_eval(for_x_in_xs_get_y_if_exist(custom_attributes, 'value'))[0]
+
+    # description attribute
+    # Description of the element
+    if for_x_in_xs_get_y_if_exist(long_string_attributes, 'description') is not None:
+        description_attribute = for_x_in_xs_get_y_if_exist(long_string_attributes, 'description')
 
     result = {
         "values": values_attribute,  # should be a list [] with elements {}
