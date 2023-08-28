@@ -1,4 +1,5 @@
 import glob
+import numbers
 import random
 import uuid
 import string
@@ -94,11 +95,15 @@ def translate_date(xml_element):
     row_number = generate_random_string(6)
     make_id = "Field_" + generate_uuid(7)
     make_key = generate_uuid(7) + "_key"
-    my_date_description = xml_element.find('./longStringAttribute/value') if xml_element.find('./longStringAttribute/value') is not None else ""
+    if xml_element.find('./longStringAttribute/value') is not None:
+        my_date_description = xml_element.find('./longStringAttribute/value')
 
     boolean_attributes = xml_element.findall('./booleanAttribute')
+
+    # default attributes
     disabled_value = False
     readonly_value = False
+    my_date_description = ""
 
     # Iterate through the found booleanAttribute subnodes
     for boolean_attribute in boolean_attributes:
@@ -138,13 +143,66 @@ def translate_date(xml_element):
 
 
 def translate_textarea(xml_element):
-    name_element = xml_element.find('./name')
-    if name_element is not None:  # Check if the 'name' element was found
-        name = name_element.text  # Access the text content of the 'name' element
-        print(name)
-    else:
-        print("Name element not found")
-    pass
+    textfield_label_element = xml_element.find('./label')
+    textfield_label = textfield_label_element.text if textfield_label_element is not None else ""
+
+    row_number = generate_random_string(6)
+    make_id = "Field_" + generate_uuid(7)
+    make_key = generate_uuid(7) + "_key"
+
+    #default values
+    default_attribute = ""
+    required_attribute = False
+    min_length_attribute = 0
+    max_length_attribute = 99999
+
+    long_string_attributes = xml_element.findall('./longStringAttribute')
+    boolean_attributes = xml_element.findall('./booleanAttribute')
+    string_attributes = xml_element.findall('./stringAttribute')
+    number_attributes = xml_element.findall/'./numberAttribute'
+
+    # Description of the field
+    for long_String_attribute in long_string_attributes:
+        name_attribute = long_String_attribute.find('./name')
+        if name_attribute is not None and name_attribute.text == 'description':
+            if long_String_attribute.find('./value') is not None and long_String_attribute != "":
+                description_attribute = long_String_attribute.find('./value').text
+
+
+    # Iterate through the found booleanAttribute subnodes
+    for boolean_attribute in boolean_attributes:
+        # Check if the 'name' attribute has the value 'readonly'
+        name_attribute = boolean_attribute.find('./name')
+        if name_attribute is not None and name_attribute.text == 'editable':
+            value_attribute = boolean_attribute.find('./value')
+            if value_attribute is not None:
+                disabled_value = value_attribute.text.capitalize() == "True"
+        elif name_attribute is not None and name_attribute.text == 'readOnly':
+            # Retrieve the 'value' attribute
+            value_attribute = boolean_attribute.find('./value')
+            if value_attribute is not None:
+                readonly_value = value_attribute.text.capitalize() == "True"
+
+    # build result
+    result = {
+        "label": textfield_label,
+        "type": "textarea",
+        "layout": {
+            "row": row_number,
+            "columns": None
+        },
+        "id": make_id,
+        "key": make_key,
+        "description" : description_attribute,
+        "defaultValue": default_attribute,
+        "validate": {
+            "required": required_attribute,
+            "minLength": min_length_attribute,
+            "maxLength": max_length_attribute
+        }
+    }
+    print(json.dumps(result, indent=4))  # This should print to file later
+    return result
 
 
 def translate_timespinner(xml_element):
