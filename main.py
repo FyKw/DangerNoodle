@@ -36,10 +36,10 @@ def process_xml_file(file_path):
         process_tree(xml_tree)
 
 
-def for_x_in_xs_get_y_if_exist(x, y):
-    for element in x:
+def for_x_in_xs_get_y_if_exist(list_of_elements, look_for_this_name):
+    for element in list_of_elements:
         name_attribute = element.find('./name')
-        if name_attribute is not None and name_attribute.text == f'{y}':
+        if name_attribute is not None and name_attribute.text == f'{look_for_this_name}':
             if element.find('./value') is not None and element != "":
                 res = element.find('./value').text
                 return res
@@ -145,14 +145,12 @@ def translate_textarea(xml_element):
     make_id = "Field_" + generate_uuid(7)
     make_key = generate_uuid(7) + "_key"
 
-    # set default values
+    # set default values, bool will be set by the check
     default_attribute = ""
     description_attribute = ""
-    required_attribute = False
     min_length_attribute = 0
     max_length_attribute = 99999
     pattern_attribute = ""
-    readonly_attribute = False
 
     # define lookup tables from the xml
     long_string_attributes = xml_element.findall('./longStringAttribute')
@@ -172,9 +170,6 @@ def translate_textarea(xml_element):
     if for_x_in_xs_get_y_if_exist(string_attributes, 'emptyText') is not None:
         default_attribute = for_x_in_xs_get_y_if_exist(string_attributes, 'emptyText')
 
-    # required value of the element
-    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize() == "True"
-
     # min length of the element
     if for_x_in_xs_get_y_if_exist(number_attributes, 'minLength') is not None:
         min_length_attribute = for_x_in_xs_get_y_if_exist(number_attributes, 'minLength')
@@ -189,6 +184,9 @@ def translate_textarea(xml_element):
 
     # readonly bool of the element
     readonly_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize == 'True'
+
+    # required value of the element
+    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize() == "True"
 
     # build result
     result = {
