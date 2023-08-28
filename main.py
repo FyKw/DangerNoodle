@@ -36,6 +36,14 @@ def process_xml_file(file_path):
         process_tree(xml_tree)
 
 
+def for_x_in_xs_get_y_if_exist(x, y):
+    for element in x:
+        name_attribute = element.find('./name')
+        if name_attribute is not None and name_attribute.text == f'{y}':
+            if element.find('./value') is not None and element != "":
+                res = element.find('./value').text
+                return res
+
 def translate_tab_item(xml_element) -> dict:
     # Arrange
 
@@ -105,19 +113,8 @@ def translate_date(xml_element):
     readonly_value = False
     my_date_description = ""
 
-    # Iterate through the found booleanAttribute subnodes
-    for boolean_attribute in boolean_attributes:
-        # Check if the 'name' attribute has the value 'readonly'
-        name_attribute = boolean_attribute.find('./name')
-        if name_attribute is not None and name_attribute.text == 'editable':
-            value_attribute = boolean_attribute.find('./value')
-            if value_attribute is not None:
-                disabled_value = value_attribute.text.capitalize() == "True"
-        elif name_attribute is not None and name_attribute.text == 'readOnly':
-            # Retrieve the 'value' attribute
-            value_attribute = boolean_attribute.find('./value')
-            if value_attribute is not None:
-                readonly_value = value_attribute.text.capitalize() == "True"
+    disabled_value = not for_x_in_xs_get_y_if_exist(boolean_attributes, 'editable').capitalize() == 'True'
+    readonly_value = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize() == 'True'
 
     # build result
     result = {
@@ -155,61 +152,43 @@ def translate_textarea(xml_element):
     min_length_attribute = 0
     max_length_attribute = 99999
     pattern_attribute = ""
-    disabled_attribute = False
     readonly_attribute = False
 
     # define lookup tables from the xml
     long_string_attributes = xml_element.findall('./longStringAttribute')
     boolean_attributes = xml_element.findall('./booleanAttribute')
     string_attributes = xml_element.findall('./stringAttribute')
-    number_attributes = xml_element.findall/'./numberAttribute'
+    number_attributes = xml_element.findall('./numberAttribute')
 
     # label of the element
     textfield_label_element = xml_element.find('./label')
     textfield_label = textfield_label_element.text if textfield_label_element is not None else ""
 
     # Description of the element
-    for long_String_attribute in long_string_attributes:
-        name_attribute = long_String_attribute.find('./name')
-        if name_attribute is not None and name_attribute.text == 'description':
-            if long_String_attribute.find('./value') is not None and long_String_attribute != "":
-                description_attribute = long_String_attribute.find('./value').text
+    if for_x_in_xs_get_y_if_exist(long_string_attributes, 'description') is not None:
+        description_attribute = for_x_in_xs_get_y_if_exist(long_string_attributes, 'description')
 
     # default value of the element
-    for string_attribute in string_attributes:
-        name_attribute = string_attribute.find('./name')
-        if name_attribute is not None and name_attribute.text == 'emptyText':
-            if string_attribute.find('./value') is not None and string_attribute != "":
-                default_attribute = string_attribute.find('./value').text
+    if for_x_in_xs_get_y_if_exist(string_attributes, 'emptyText') is not None:
+        default_attribute = for_x_in_xs_get_y_if_exist(string_attributes, 'emptyText')
 
     # required value of the element
-    for boolean_attribute in boolean_attributes:
-        name_attribute = boolean_attribute.find('./name')
-        if name_attribute is not None and name_attribute.text == 'allowBlank':
-            if boolean_attribute.find('./value') is not None:
-                required_attribute = boolean_attribute.find('./value').text.capitalize() == "True"
+    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize() == "True"
 
-    # min and max length of the element
+    # min length of the element
+    if for_x_in_xs_get_y_if_exist(number_attributes, 'minLength') is not None:
+        min_length_attribute = for_x_in_xs_get_y_if_exist(number_attributes, 'minLength')
+
+    # max length of the element
+    if for_x_in_xs_get_y_if_exist(number_attributes, 'maxLength') is not None:
+        min_length_attribute = for_x_in_xs_get_y_if_exist(number_attributes, 'maxLength')
 
     # pattern to check against of the element
-
-    # disabled bool of the element
+    if for_x_in_xs_get_y_if_exist(string_attributes, 'regex') is not None:
+        pattern_attribute = for_x_in_xs_get_y_if_exist(string_attributes,'regex')
 
     # readonly bool of the element
-
-    # Iterate through the found booleanAttribute subnodes
-    for boolean_attribute in boolean_attributes:
-        # Check if the 'name' attribute has the value 'readonly'
-        name_attribute = boolean_attribute.find('./name')
-        if name_attribute is not None and name_attribute.text == 'editable':
-            value_attribute = boolean_attribute.find('./value')
-            if value_attribute is not None:
-                disabled_value = value_attribute.text.capitalize() == "True"
-        elif name_attribute is not None and name_attribute.text == 'readOnly':
-            # Retrieve the 'value' attribute
-            value_attribute = boolean_attribute.find('./value')
-            if value_attribute is not None:
-                readonly_value = value_attribute.text.capitalize() == "True"
+    readonly_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize == 'True'
 
     # build result
     result = {
@@ -224,7 +203,6 @@ def translate_textarea(xml_element):
         "defaultValue": default_attribute,
         "description": description_attribute,
         "readonly": readonly_attribute,
-        "disabled": disabled_attribute,
         "validate": {
             "required": required_attribute,
             "minLength": min_length_attribute,
