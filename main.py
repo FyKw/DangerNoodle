@@ -71,7 +71,7 @@ def translate_tab_item(xml_element) -> dict:
 
 
 def translate_group_item(xml_element):
-    # Arrange
+    # TODO clean this mess up
 
     row_number = generate_random_string(6)
     make_id = "Field_" + generate_uuid(7)
@@ -95,7 +95,7 @@ def translate_group_item(xml_element):
 
 
 def translate_date(xml_element):
-    # Arrange
+    # Todo make this function again in good, this is a mess
 
     datefield_label_element = xml_element.find('./label')
     datefield_label = datefield_label_element.text if datefield_label_element is not None else ""
