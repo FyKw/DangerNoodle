@@ -233,13 +233,8 @@ def translate_radiobutton(xml_element):
 
 
 def translate_textfield(xml_element):
-    name_element = xml_element.find('./name')
-    if name_element is not None:  # Check if the 'name' element was found
-        name = name_element.text  # Access the text content of the 'name' element
-        print(name)
-    else:
-        print("Name element not found")
-    pass
+    # Todo: check if there are any other changes
+    return translate_textarea(xml_element)
 
 
 def translate_booleancombo(xml_element):
