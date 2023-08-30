@@ -398,7 +398,7 @@ def translate_combo(xml_element):
             "required": required_attribute
             }
         }
-    print(json.dumps(result, indent=4))
+    # print(json.dumps(result, indent=4))
     return result
 
 
