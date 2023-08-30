@@ -280,7 +280,7 @@ def translate_radiobutton(xml_element):
             "required": required_attribute
             }
         }
-    print(json.dumps(result, indent=4))
+    # print(json.dumps(result, indent=4))
     return result
 
 
@@ -339,18 +339,67 @@ def translate_booleancombo(xml_element):
             "required": required_attribute_bool
         }
     }
-    print(json.dumps(result, indent=4))
+    # print(json.dumps(result, indent=4))
     return result
 
 
 def translate_combo(xml_element):
-    name_element = xml_element.find('./name')
-    if name_element is not None:  # Check if the 'name' element was found
-        name = name_element.text  # Access the text content of the 'name' element
-        print(name)
-    else:
-        print("Name element not found")
-    pass
+    row_number = generate_random_string(6)
+    make_id = "Field_" + generate_uuid(7)
+    make_key = generate_uuid(7) + "_key"
+
+    # set default values, bool will be set by the check
+    description_attribute = ""
+
+    # define lookup tables from the xml
+    long_string_attributes = xml_element.findall('./longStringAttribute')
+    array_attributes = xml_element.findall('./arrayAttribute')
+    boolean_attributes = xml_element.findall('./booleanAttribute')
+
+    # label of the element
+    radio_label_element = xml_element.find('./label')
+    label_attribute = radio_label_element.text if radio_label_element is not None else ""
+
+    # disabled was not set in test data
+    disabled_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'editable').capitalize == 'True'
+
+    # readonly was not set in test data
+    readonly_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize == 'True'
+
+    # required attribute was not set in test data
+    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize == 'True'
+
+    # values from the data
+    # Convert the string to a Python list
+    input_str = for_x_in_xs_get_y_if_exist(array_attributes, 'data')
+    input_list = literal_eval(input_str)
+    # Flatten the list and create the desired dictionary
+    values_attribute = [{"label": val, "value": val} for sublist in input_list for val in sublist]
+
+    # description attribute
+    # Description of the element
+    if for_x_in_xs_get_y_if_exist(long_string_attributes, 'description') is not None:
+        description_attribute = for_x_in_xs_get_y_if_exist(long_string_attributes, 'description')
+
+    result = {
+        "values": values_attribute,  # should be a list [] with elements {}
+        "label": label_attribute,
+        "type": "taglist",
+        "layout": {
+            "row": row_number,
+            "columns": None
+        },
+        "id": make_id,
+        "key": make_key,
+        "description": description_attribute,
+        "disabled": disabled_attribute,
+        "readonly": readonly_attribute,
+        "validate": {
+            "required": required_attribute
+            }
+        }
+    print(json.dumps(result, indent=4))
+    return result
 
 
 def translate_label(xml_element):
