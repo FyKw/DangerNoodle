@@ -1,10 +1,8 @@
-import array
 import glob
-import numbers
-import random
-import uuid
-import string
 import json
+import random
+import string
+import uuid
 from ast import literal_eval
 
 from lxml import etree
@@ -106,8 +104,6 @@ def translate_date(xml_element):
     row_number = generate_random_string(6)
     make_id = "Field_" + generate_uuid(7)
     make_key = generate_uuid(7) + "_key"
-    if xml_element.find('./longStringAttribute/value') is not None:
-        my_date_description = xml_element.find('./longStringAttribute/value')
 
     boolean_attributes = xml_element.findall('./booleanAttribute')
 
@@ -181,13 +177,13 @@ def translate_textarea(xml_element):
 
     # pattern to check against of the element
     if for_x_in_xs_get_y_if_exist(string_attributes, 'regex') is not None:
-        pattern_attribute = for_x_in_xs_get_y_if_exist(string_attributes,'regex')
+        pattern_attribute = for_x_in_xs_get_y_if_exist(string_attributes, 'regex')
 
     # readonly bool of the element
     readonly_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize == 'True'
 
     # required value of the element
-    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize() == 'True'
+    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize == 'True'
 
     # build result
     result = {
@@ -230,7 +226,6 @@ def translate_radiobutton(xml_element):
     make_key = generate_uuid(7) + "_key"
 
     # set default values, bool will be set by the check
-    default_attribute = None
     description_attribute = ""
 
     # define lookup tables from the xml
@@ -295,13 +290,57 @@ def translate_textfield(xml_element):
 
 
 def translate_booleancombo(xml_element):
-    name_element = xml_element.find('./name')
-    if name_element is not None:  # Check if the 'name' element was found
-        name = name_element.text  # Access the text content of the 'name' element
-        print(name)
-    else:
-        print("Name element not found")
-    pass
+    # make Id elements
+    row_number = generate_random_string(6)
+    make_id = "Field_" + generate_uuid(7)
+    make_key = generate_uuid(7) + "_key"
+
+    # set default values, bool will be set by the check
+    default_attribute_bool = False
+    description_attribute = ""
+    disabled_attribute = False
+
+    # define lookup tables from the xml
+    long_string_attributes = xml_element.findall('./longStringAttribute')
+    boolean_attributes = xml_element.findall('./booleanAttribute')
+    string_attributes = xml_element.findall('./stringAttribute')
+
+    # label of the element
+    label_attribute = xml_element.find('./label').text
+
+    # description attribute of the element
+    if for_x_in_xs_get_y_if_exist(long_string_attributes, 'description') is not None:
+        description_attribute = for_x_in_xs_get_y_if_exist(long_string_attributes, 'description')
+
+    # disabled attribute
+    if for_x_in_xs_get_y_if_exist(string_attributes, 'value') is not None:
+        disabled_attribute = for_x_in_xs_get_y_if_exist(string_attributes, 'value').text == "True"
+
+    # readonly attribute
+    readonly_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize == 'True'
+
+    # required attribute was not set in test data
+    required_attribute_bool = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize == 'True'
+
+    result = {
+        "label": label_attribute,
+        "type": "checkbox",
+        "layout": {
+            "row": row_number,
+            "columns": None
+        },
+        "id": make_id,
+        "key": make_key,
+        "description": description_attribute,
+        "defaultValue": default_attribute_bool,
+        "disabled": disabled_attribute,
+        "readonly": readonly_attribute,
+        "validate": {
+            "required": required_attribute_bool
+        }
+    }
+    print(json.dumps(result, indent=4))
+    return result
 
 
 def translate_combo(xml_element):
