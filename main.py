@@ -1,6 +1,6 @@
 """
 This script should be put into a folder with xml files.
-After execution it should make a dir, filled with a json file for each xml file respectively.
+After execution, it should make a dir, filled with a json file for each xml file respectively.
 """
 
 import glob
@@ -57,7 +57,7 @@ def translate_tab_item(xml_element) -> dict:
     make_id = "Field_" + generate_uuid(7)
     tab_name_element = xml_element.find('./stringAttribute/value')
     tab_name = tab_name_element.text if tab_name_element is not None else ""
-
+    # placehold.co will give us simple images that we can use to create the illusion of hline like blocks
     placeholder_url = "https://placehold.co/1000x70?text=" + str(tab_name)
 
     # build result
@@ -403,6 +403,7 @@ def translate_combo(xml_element):
         }
     # print(json.dumps(result, indent=4))
     return result
+
 
 def translate_label(xml_element):
     name_element = xml_element.find('./name')
