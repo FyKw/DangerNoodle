@@ -50,7 +50,7 @@ def get_value_from_elements(list_of_elements, look_for_this_name):
                 return res
 
 
-def translate_tab_item(xml_element) -> dict:
+def translate_tab_item(xml_element):
     # Arrange
 
     row_number = generate_random_string(6)
