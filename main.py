@@ -419,58 +419,62 @@ def map_element(xml_element):
     # Find the 'name' child element and get its text content
     match xml_element.find('./xtype').text:
         case 'ddtabitem':
-            translate_tab_item(xml_element)
+            return translate_tab_item(xml_element)
         case 'ddgroup':
-            translate_group_item(xml_element)
+            return translate_group_item(xml_element)
         case 'tpl-datefield':
-            translate_date(xml_element)
+            return translate_date(xml_element)
         case 'tpl-textarea':
-            translate_textarea(xml_element)
+            return translate_textarea(xml_element)
         case 'tpl-label':
-            translate_label(xml_element)
+            return translate_label(xml_element)
         case 'tpl-timespinner':
-            translate_timespinner(xml_element)
+            return translate_timespinner(xml_element)
         case 'tpl-radiobtn':
-            translate_radiobutton(xml_element)
+            return translate_radiobutton(xml_element)
         case 'tpl-textfield':
-            translate_textfield(xml_element)
+            return translate_textfield(xml_element)
         case 'tpl-booleancombo':
-            translate_booleancombo(xml_element)
+            return translate_booleancombo(xml_element)
         case 'tpl-combo':
-            translate_combo(xml_element)
+            return translate_combo(xml_element)
         case _:
             print("Could not map element")
 
 
 def process_panel(panel):
+    combination = []
     # Check if xtype has the value "ddtabitem"
     xtype = panel.find('./xtype').text
     if xtype == 'ddtabitem':
         # Call mapElement function (to be implemented later)
-        map_element(panel)
+        combination.append(map_element(panel))
     else:
         print("panel has wrong format")
 
         # Iterate through FormGroup elements within the Panel
     for form_group in panel.findall('./FormGroup'):
-        map_element(form_group)  # Call mapElement for each FormGroup
+        combination.append(map_element(form_group))  # Call mapElement for each FormGroup
 
         # Iterate through FormField elements within the FormGroup
         for form_field in form_group.findall('./formField'):
-            map_element(form_field)  # Call mapElement for each FormField
+            combination.append(map_element(form_field))  # Call mapElement for each FormField
+    return combination
 
 
 # Iterate through all Panel elements within the XML
 def process_tree(xml_tree):
+    panels = []
     for panel in xml_tree.findall('.//Panel'):
-        process_panel(panel)
+        panels.append(process_panel(panel))
+    return panels
 
 
 # Iterate through the found XML files and process each one
 def main():
     for xml_file in xml_files:
         print(f"Processing file: {xml_file}")
-        process_xml_file(xml_file)
+        process_xml_file(xml_file)  # TODO should forward to a makeJson funciton
 
 
 if __name__ == '__main__':
