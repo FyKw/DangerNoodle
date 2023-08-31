@@ -1,3 +1,8 @@
+"""
+This script should be put into a folder with xml files.
+After execution it should make a dir, filled with a json file for each xml file respectively.
+"""
+
 import glob
 import json
 import random
@@ -36,7 +41,7 @@ def process_xml_file(file_path):
         process_tree(xml_tree)
 
 
-def for_x_in_xs_get_y_if_exist(list_of_elements, look_for_this_name):
+def get_value_from_elements(list_of_elements, look_for_this_name):
     for element in list_of_elements:
         name_attribute = element.find('./name')
         if name_attribute is not None and name_attribute.text == f'{look_for_this_name}':
@@ -96,8 +101,6 @@ def translate_group_item(xml_element):
 
 
 def translate_date(xml_element):
-    # Todo make this function again in good, this is a mess
-
     datefield_label_element = xml_element.find('./label')
     datefield_label = datefield_label_element.text if datefield_label_element is not None else ""
 
@@ -110,8 +113,8 @@ def translate_date(xml_element):
     # default attributes, booleans are set at check
     my_date_description = ""
 
-    disabled_value = not for_x_in_xs_get_y_if_exist(boolean_attributes, 'editable').capitalize() == 'True'
-    readonly_value = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize() == 'True'
+    disabled_value = not get_value_from_elements(boolean_attributes, 'editable').capitalize() == 'True'
+    readonly_value = get_value_from_elements(boolean_attributes, 'readOnly').capitalize() == 'True'
 
     # build result
     result = {
@@ -160,30 +163,30 @@ def translate_textarea(xml_element):
     textfield_label = textfield_label_element.text if textfield_label_element is not None else ""
 
     # Description of the element
-    if for_x_in_xs_get_y_if_exist(long_string_attributes, 'description') is not None:
-        description_attribute = for_x_in_xs_get_y_if_exist(long_string_attributes, 'description')
+    if get_value_from_elements(long_string_attributes, 'description') is not None:
+        description_attribute = get_value_from_elements(long_string_attributes, 'description')
 
     # default value of the element
-    if for_x_in_xs_get_y_if_exist(string_attributes, 'emptyText') is not None:
-        default_attribute = for_x_in_xs_get_y_if_exist(string_attributes, 'emptyText')
+    if get_value_from_elements(string_attributes, 'emptyText') is not None:
+        default_attribute = get_value_from_elements(string_attributes, 'emptyText')
 
     # min length of the element
-    if for_x_in_xs_get_y_if_exist(number_attributes, 'minLength') is not None:
-        min_length_attribute = for_x_in_xs_get_y_if_exist(number_attributes, 'minLength')
+    if get_value_from_elements(number_attributes, 'minLength') is not None:
+        min_length_attribute = get_value_from_elements(number_attributes, 'minLength')
 
     # max length of the element
-    if for_x_in_xs_get_y_if_exist(number_attributes, 'maxLength') is not None:
-        min_length_attribute = for_x_in_xs_get_y_if_exist(number_attributes, 'maxLength')
+    if get_value_from_elements(number_attributes, 'maxLength') is not None:
+        min_length_attribute = get_value_from_elements(number_attributes, 'maxLength')
 
     # pattern to check against of the element
-    if for_x_in_xs_get_y_if_exist(string_attributes, 'regex') is not None:
-        pattern_attribute = for_x_in_xs_get_y_if_exist(string_attributes, 'regex')
+    if get_value_from_elements(string_attributes, 'regex') is not None:
+        pattern_attribute = get_value_from_elements(string_attributes, 'regex')
 
     # readonly bool of the element
-    readonly_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize == 'True'
+    readonly_attribute = get_value_from_elements(boolean_attributes, 'readOnly').capitalize == 'True'
 
     # required value of the element
-    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize == 'True'
+    required_attribute = get_value_from_elements(boolean_attributes, 'allowBlank').capitalize == 'True'
 
     # build result
     result = {
@@ -248,19 +251,19 @@ def translate_radiobutton(xml_element):
 
     # values from the data
     # Convert the string to a Python list
-    input_str = for_x_in_xs_get_y_if_exist(array_attributes, 'data')
+    input_str = get_value_from_elements(array_attributes, 'data')
     input_list = literal_eval(input_str)
 
     # Flatten the list and create the desired dictionary
     values_attribute = [{"label": val, "value": val} for sublist in input_list for val in sublist]
 
     # default attribute
-    default_attribute = literal_eval(for_x_in_xs_get_y_if_exist(custom_attributes, 'value'))[0]
+    default_attribute = literal_eval(get_value_from_elements(custom_attributes, 'value'))[0]
 
     # description attribute
     # Description of the element
-    if for_x_in_xs_get_y_if_exist(long_string_attributes, 'description') is not None:
-        description_attribute = for_x_in_xs_get_y_if_exist(long_string_attributes, 'description')
+    if get_value_from_elements(long_string_attributes, 'description') is not None:
+        description_attribute = get_value_from_elements(long_string_attributes, 'description')
 
     result = {
         "values": values_attribute,  # should be a list [] with elements {}
@@ -309,18 +312,18 @@ def translate_booleancombo(xml_element):
     label_attribute = xml_element.find('./label').text
 
     # description attribute of the element
-    if for_x_in_xs_get_y_if_exist(long_string_attributes, 'description') is not None:
-        description_attribute = for_x_in_xs_get_y_if_exist(long_string_attributes, 'description')
+    if get_value_from_elements(long_string_attributes, 'description') is not None:
+        description_attribute = get_value_from_elements(long_string_attributes, 'description')
 
     # disabled attribute
-    if for_x_in_xs_get_y_if_exist(string_attributes, 'value') is not None:
-        disabled_attribute = for_x_in_xs_get_y_if_exist(string_attributes, 'value').text == "True"
+    if get_value_from_elements(string_attributes, 'value') is not None:
+        disabled_attribute = get_value_from_elements(string_attributes, 'value').text == "True"
 
     # readonly attribute
-    readonly_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize == 'True'
+    readonly_attribute = get_value_from_elements(boolean_attributes, 'readOnly').capitalize == 'True'
 
     # required attribute was not set in test data
-    required_attribute_bool = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize == 'True'
+    required_attribute_bool = get_value_from_elements(boolean_attributes, 'allowBlank').capitalize == 'True'
 
     result = {
         "label": label_attribute,
@@ -361,25 +364,25 @@ def translate_combo(xml_element):
     label_attribute = radio_label_element.text if radio_label_element is not None else ""
 
     # disabled was not set in test data
-    disabled_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'editable').capitalize == 'True'
+    disabled_attribute = get_value_from_elements(boolean_attributes, 'editable').capitalize == 'True'
 
     # readonly was not set in test data
-    readonly_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'readOnly').capitalize == 'True'
+    readonly_attribute = get_value_from_elements(boolean_attributes, 'readOnly').capitalize == 'True'
 
     # required attribute was not set in test data
-    required_attribute = for_x_in_xs_get_y_if_exist(boolean_attributes, 'allowBlank').capitalize == 'True'
+    required_attribute = get_value_from_elements(boolean_attributes, 'allowBlank').capitalize == 'True'
 
     # values from the data
     # Convert the string to a Python list
-    input_str = for_x_in_xs_get_y_if_exist(array_attributes, 'data')
+    input_str = get_value_from_elements(array_attributes, 'data')
     input_list = literal_eval(input_str)
     # Flatten the list and create the desired dictionary
     values_attribute = [{"label": val, "value": val} for sublist in input_list for val in sublist]
 
     # description attribute
     # Description of the element
-    if for_x_in_xs_get_y_if_exist(long_string_attributes, 'description') is not None:
-        description_attribute = for_x_in_xs_get_y_if_exist(long_string_attributes, 'description')
+    if get_value_from_elements(long_string_attributes, 'description') is not None:
+        description_attribute = get_value_from_elements(long_string_attributes, 'description')
 
     result = {
         "values": values_attribute,  # should be a list [] with elements {}
@@ -400,7 +403,6 @@ def translate_combo(xml_element):
         }
     # print(json.dumps(result, indent=4))
     return result
-
 
 def translate_label(xml_element):
     name_element = xml_element.find('./name')
