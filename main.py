@@ -8,6 +8,7 @@ import json
 import random
 import string
 import uuid
+import os
 from ast import literal_eval
 
 from lxml import etree
@@ -38,7 +39,7 @@ def process_xml_file(file_path):
     xml_tree = etree.parse(file_path)
     print(f"XML Validation: {schema.validate(xml_tree)}")  # Print validation result
     if schema.validate(xml_tree):
-        process_tree(xml_tree)
+        return process_tree(xml_tree)
 
 
 def get_value_from_elements(list_of_elements, look_for_this_name):
@@ -323,7 +324,7 @@ def translate_radiobutton(xml_element):
     return result
 
 
-def set_meta(name):
+def put_meta(name):
     meta = {
         "type": "default",
         "id": name,
@@ -508,6 +509,17 @@ def process_panel(panel):
     return combination
 
 
+def write_json_to_file(data, file_path):
+    # Check if the file exists. If not, conjure it from the digital ether.
+    if not os.path.exists(file_path):
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.write("{}")
+
+    # Now, inscribe the JSON data into the file.
+    with open(file_path, 'w', encoding='utf-8') as file:
+        json.dump(data, file, ensure_ascii=False, indent=4)
+
+
 # Iterate through all Panel elements within the XML
 def process_tree(xml_tree):
     panels = []
@@ -520,8 +532,9 @@ def process_tree(xml_tree):
 def main():
     for xml_file in xml_files:
         print(f"Processing file: {xml_file}")
-        process_xml_file(xml_file)  # TODO should forward to a makeJson funciton
-        set_meta(xml_file.lstrip('.\\').rstrip('.xml'))
+        name_of_file = xml_file.lstrip('.\\').rstrip('.xml')
+        data = process_xml_file(xml_file), put_meta(name_of_file)
+        write_json_to_file(data, f"./{name_of_file}.JSON")
 
 
 if __name__ == '__main__':
