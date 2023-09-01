@@ -101,17 +101,22 @@ def translate_group_item(xml_element):
 
 
 def translate_date(xml_element):
+    # maybe split up date to only make date possible as following workflow might need a different format
+
     datefield_label_element = xml_element.find('./label')
     datefield_label = datefield_label_element.text if datefield_label_element is not None else ""
 
     row_number = generate_random_string(6)
     make_id = "Field_" + generate_uuid(7)
     make_key = generate_uuid(7) + "_key"
+    my_date_description = ""
 
     boolean_attributes = xml_element.findall('./booleanAttribute')
+    long_string_attributes = xml_element.findall('./longStringAttributes')
 
     # default attributes, booleans are set at check
-    my_date_description = ""
+    if get_value_from_elements(long_string_attributes, 'value') is not None:
+        my_date_description = get_value_from_elements(long_string_attributes, 'value')
 
     disabled_value = not get_value_from_elements(boolean_attributes, 'editable').capitalize() == 'True'
     readonly_value = get_value_from_elements(boolean_attributes, 'readOnly').capitalize() == 'True'
@@ -213,13 +218,44 @@ def translate_textarea(xml_element):
 
 
 def translate_timespinner(xml_element):
-    name_element = xml_element.find('./name')
-    if name_element is not None:  # Check if the 'name' element was found
-        name = name_element.text  # Access the text content of the 'name' element
-        print(name)
-    else:
-        print("Name element not found")
-    pass
+    datefield_label_element = xml_element.find('./label')
+    timespinner_label = datefield_label_element.text if datefield_label_element is not None else ""
+
+    row_number = generate_random_string(6)
+    make_id = "Field_" + generate_uuid(7)
+    make_key = generate_uuid(7) + "_key"
+    my_date_description = ""
+
+    boolean_attributes = xml_element.findall('./booleanAttribute')
+    long_string_attributes = xml_element.findall('./longStringAttributes')
+
+    # default attributes, booleans are set at check
+    if get_value_from_elements(long_string_attributes, 'value') is not None:
+        my_date_description = get_value_from_elements(long_string_attributes, 'value')
+
+    disabled_value = not get_value_from_elements(boolean_attributes, 'editable').capitalize() == 'True'
+    readonly_value = get_value_from_elements(boolean_attributes, 'readOnly').capitalize() == 'True'
+
+    # build result
+    result = {
+        "subtype": "time",
+        "label": "Date time",
+        "type": "datetime",
+        "layout": {
+            "row": row_number,
+            "columns": None
+        },
+        "id": make_id,
+        "key": make_key,
+        "timeLabel": timespinner_label,
+        "timeSerializingFormat": "utc_offset",
+        "timeInterval": 5,
+        "description": my_date_description,
+        "disabled": disabled_value,
+        "readonly": readonly_value
+    }
+    # print(json.dumps(result, indent=4))  # This should print to file later
+    return result
 
 
 def translate_radiobutton(xml_element):
@@ -287,12 +323,27 @@ def translate_radiobutton(xml_element):
     return result
 
 
+def set_meta(name):
+    meta = {
+        "type": "default",
+        "id": name,
+        "exporter": {
+            "name": "Camunda Modeler",
+            "version": "5.13.0"
+        },
+        "executionPlatform": "Camunda Platform",
+        "executionPlatformVersion": "7.19.0",
+        "schemaVersion": 9
+    }
+    return meta
+
+
 def translate_textfield(xml_element):
     # Todo: check if there are any other changes
     return translate_textarea(xml_element)
 
 
-def translate_booleancombo(xml_element):
+def translate_boolean_combo(xml_element):
     # make Id elements
     row_number = generate_random_string(6)
     make_id = "Field_" + generate_uuid(7)
@@ -406,12 +457,7 @@ def translate_combo(xml_element):
 
 
 def translate_label(xml_element):
-    name_element = xml_element.find('./name')
-    if name_element is not None:  # Check if the 'name' element was found
-        name = name_element.text  # Access the text content of the 'name' element
-        print(name)
-    else:
-        print("Name element not found")
+    # get some data to check how this needs to be implemented if at all
     pass
 
 
@@ -435,7 +481,7 @@ def map_element(xml_element):
         case 'tpl-textfield':
             return translate_textfield(xml_element)
         case 'tpl-booleancombo':
-            return translate_booleancombo(xml_element)
+            return translate_boolean_combo(xml_element)
         case 'tpl-combo':
             return translate_combo(xml_element)
         case _:
@@ -475,6 +521,7 @@ def main():
     for xml_file in xml_files:
         print(f"Processing file: {xml_file}")
         process_xml_file(xml_file)  # TODO should forward to a makeJson funciton
+        set_meta(xml_file.lstrip('.\\').rstrip('.xml'))
 
 
 if __name__ == '__main__':
