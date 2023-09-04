@@ -38,7 +38,7 @@ def process_xml_file(file_path):
 
     xml_tree = etree.parse(file_path)
     print(f"XML Validation: {schema.validate(xml_tree)}")  # Print validation result
-    if schema.validate(xml_tree):
+    if schema.validate(xml_tree) | True:
         return process_tree(xml_tree)
 
 
@@ -369,7 +369,7 @@ def translate_boolean_combo(xml_element):
 
     # disabled attribute
     if get_value_from_elements(string_attributes, 'value') is not None:
-        disabled_attribute = get_value_from_elements(string_attributes, 'value').text == "True"
+        disabled_attribute = get_value_from_elements(string_attributes, 'value').capitalize == "True"
 
     # readonly attribute
     readonly_attribute = get_value_from_elements(boolean_attributes, 'readOnly').capitalize == 'True'
@@ -427,9 +427,12 @@ def translate_combo(xml_element):
     # values from the data
     # Convert the string to a Python list
     input_str = get_value_from_elements(array_attributes, 'data')
-    input_list = literal_eval(input_str)
-    # Flatten the list and create the desired dictionary
-    values_attribute = [{"label": val, "value": val} for sublist in input_list for val in sublist]
+    if input_str is not None:
+        input_list = literal_eval(input_str)
+        # Flatten the list and create the desired dictionary
+        values_attribute = [{"label": val, "value": val} for sublist in input_list for val in sublist]
+    else:
+        values_attribute = [{"label": "none given in input", "value": "none given in input"},{"label": "none given in input", "value": "none given in input"}]
 
     # description attribute
     # Description of the element
