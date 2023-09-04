@@ -23,3 +23,6 @@ Thumbs.db
 # And any secret files containing sensitive info
 secrets.yaml
 /dist/
+/SAP-RC_test.xml
+
+./.idea/*.iml
