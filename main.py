@@ -432,7 +432,10 @@ def translate_combo(xml_element):
         # Flatten the list and create the desired dictionary
         values_attribute = [{"label": val, "value": val} for sublist in input_list for val in sublist]
     else:
-        values_attribute = [{"label": "none given in input", "value": "none given in input"},{"label": "none given in input", "value": "none given in input"}]
+        values_attribute = [{"label": "none given in input", "value": "none given in input"}, {"label": "none given "
+                                                                                                        "in input",
+                                                                                               "value": "none given "
+                                                                                                        "in input"}]
 
     # description attribute
     # Description of the element
