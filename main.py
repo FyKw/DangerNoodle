@@ -465,6 +465,7 @@ def translate_combo(xml_element):
 
 def translate_label(xml_element):
     # get some data to check how this needs to be implemented if at all
+    # In den Testdaten gab es kein Element von dem ich den Aufbau bekommen konnte.
     pass
 
 
