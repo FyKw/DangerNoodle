@@ -28,7 +28,8 @@ pyinstaller --onefile main.py
 # todos
 - [ ] possible errors verbessern
 - [ ] Sprache von Denglisch auf eins von beiden ausbessern
-- [ ] modularisierung für bessere Lesbarkeit
+- [ ] modularisierung für bessere Lesbarkeit -> src, translater, utils/io, test
 - [ ] Test schreiben
 - [ ] Hardcoded links entfernen
 - [ ] code vereinheitlichen
+- [ ] Ordnerstruktur für build, rsc, util, src
