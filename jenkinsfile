@@ -1,6 +1,6 @@
 pipeline {
     agent none
-    stages{
+    stages {
         stage('Build') {
             agent {
                 docker {
@@ -8,7 +8,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'python -m py_compile sources/main.py'
+                sh 'python -m py_compile mian.py'
                 stash(name: 'compiled-results', includes: '*.py*')
             }
         }
