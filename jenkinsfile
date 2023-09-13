@@ -1,20 +1,17 @@
 pipeline {
-    agent none
-    stages {
-        stage('Initialize') {
-            def dockerHome = tool 'docker'
-            env.PATH = "${dockerHome}/bin:${env.PATH}"
-        }
-        stage('Build') {
-            agent {
-                docker {
-                    image 'python:3.11.5-alpine3.18'
-                }
-            }
+
+    agent { docker { image 'python:3.11.5-alpine3.18' } }
+
+    stages {        stage('build') {
+
             steps {
-                sh 'python -m py_compile main.py'
-                stash(name: 'compiled-results', includes: '*.py*')
+
+                sh 'python --version'
+
             }
+
         }
+
     }
+
 }
