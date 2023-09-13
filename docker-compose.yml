@@ -1,38 +1,42 @@
-version: "3.5"
-networks:
-  jenkinsnetwork:
+version: '3.7'
 services:
-  jenkins:
-    networks:
-    - jenkinsnetwork
-    image: jenkins/jenkins:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/jenkins_home
-    user: jenkins
-    environment:
-      - PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - LANG=C.UTF-8
-      - JENKINS_HOME=/var/jenkins_home
-      - JENKINS_SLAVE_AGENT_PORT=50000
-      - REF=/usr/share/jenkins/ref
-      - JENKINS_VERSION=2.422
-      - JENKINS_UC=https://updates.jenkins.io
-      - JENKINS_UC_EXPERIMENTAL=https://updates.jenkins.io/experimental
-      - JENKINS_INCREMENTALS_REPO_MIRROR=https://repo.jenkins-ci.org/incrementals
-      - COPY_REFERENCE_FILE_LOG=/var/jenkins_home/copy_reference_file.log
-      - JAVA_HOME=/opt/java/openjdk
-    ports:
-      - "50000:50000"
-      - "8080:8080"
-  docker:
-    networks:
-      - jenkinsnetwork
+  jenkins-docker:
     image: docker:dind
+    privileged: true
+    networks:
+      - jenkins
     environment:
       - DOCKER_TLS_CERTDIR=/certs
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
     ports:
       - "3000:3000"
       - "5000:5000"
       - "2376:2376"
-    privileged: true
+
+  jenkins-blueocean:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    networks:
+      - jenkins
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+
+networks:
+  jenkins:
+    external: true
+    name: jenkins
+
+volumes:
+  jenkins-docker-certs:
+  jenkins-data:
