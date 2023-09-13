@@ -1,6 +1,10 @@
 version: "3.5"
+networks:
+  jenkinsnetwork:
 services:
   jenkins:
+    networks:
+    - jenkinsnetwork
     image: jenkins/jenkins:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -22,6 +26,8 @@ services:
       - "50000:50000"
       - "8080:8080"
   docker:
+    networks:
+      - jenkinsnetwork
     image: docker:dind
     environment:
       - DOCKER_TLS_CERTDIR=/certs

@@ -1,17 +1,16 @@
 pipeline {
-
-    agent { docker { image 'python:3.11.5-alpine3.18' } }
-
-    stages {        stage('build') {
-
-            steps {
-
-                sh 'python --version'
-
+    agent none
+    stages {
+        stage('Build') {
+            agent {
+                docker.sock {
+                    image 'python:3.11.5-alpine3.18'
+                }
             }
-
+            steps {
+                sh 'python -m py_compile main.py'
+                stash(name: 'compiled-results', includes: '*.py*')
+            }
         }
-
     }
-
 }
