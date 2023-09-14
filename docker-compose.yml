@@ -4,7 +4,7 @@ services:
     image: docker:dind
     privileged: true
     networks:
-      - jenkins
+      - jenkins-network
     environment:
       - DOCKER_TLS_CERTDIR=/certs
     volumes:
@@ -18,9 +18,9 @@ services:
   jenkins-blueocean:
     build:
       context: ./
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile-jenkins-bo
     networks:
-      - jenkins
+      - jenkins-network
     environment:
       - DOCKER_HOST=tcp://docker:2376
       - DOCKER_CERT_PATH=/certs/client
@@ -33,9 +33,9 @@ services:
       - "50000:50000"
 
 networks:
-  jenkins:
+  jenkins-network:
     external: true
-    name: jenkins
+    name: jenkins-network
 
 volumes:
   jenkins-docker-certs:

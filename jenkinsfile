@@ -4,13 +4,13 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'python:3.11.5-alpine3.18'
-                    args '--network jenkins'
+                    image 'six8/pyinstaller-alpine'
+                    args '--network jenkins-network'
                 }
             }
             steps {
-                sh 'python -m py_compile main.py'
-                stash(name: 'compiled-results', includes: '*.py*')
+                sh 'pyinstaller main.py --onefile'
+                stash(name: 'compiled-results', includes: '*.exe')
             }
         }
     }
